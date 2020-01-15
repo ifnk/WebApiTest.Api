@@ -5,6 +5,7 @@ import Home from '../components/Home'
 import Welcome from '../components/Welcome'
 import User from '../components/User/User'
 import Store from '../components/Store/Store'
+import Company from '../components/Company/Company'
 
 Vue.use(VueRouter)
 
@@ -19,7 +20,8 @@ const routes = [
     children: [
       { path: '/welcome', component: Welcome },
       { path: '/user', component: User },
-      { path: '/store', component: Store }
+      { path: '/store', component: Store },
+      { path: '/company', component: Company }
     ]
   }
 

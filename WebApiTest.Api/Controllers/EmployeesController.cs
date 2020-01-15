@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Api.Dto;
+using WebApiTest.Api.Entities;
 using WebApiTest.Api.Services;
 
 namespace WebApiTest.Api.Controllers
@@ -33,7 +34,15 @@ namespace WebApiTest.Api.Controllers
             if (!await _companyRepository.CompanyExistAsync(companyId)) return NotFound();
             var employees = await _companyRepository.GetEmployeeAsync(companyId);
             var employeeDtos = _mapper.Map<IEnumerable<EmployeeDto>>(employees);
-            return Ok(employeeDtos);
+            return Ok(new MsgReturn<object>
+            {
+                Msg = "查询员工列表成功",
+                Response = new
+                {
+                    List = employeeDtos,
+                }
+            });
+
         }
 
         [HttpGet("{employeeId}")]

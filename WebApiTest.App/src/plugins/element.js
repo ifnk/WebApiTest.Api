@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import {
   Aside,
+  Link,
   Button,
   Breadcrumb,
   Pagination,
@@ -24,12 +25,15 @@ import {
   Col,
   Table,
   TableColumn,
+  Dialog,
   MessageBox,
   Message,
   Loading
 } from 'element-ui'
 
 Vue.use(Button)
+Vue.use(Dialog)
+Vue.use(Link)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)

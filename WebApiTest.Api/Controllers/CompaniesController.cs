@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Api.Dto;
+using WebApiTest.Api.Entities;
 using WebApiTest.Api.Services;
 
 namespace WebApiTest.Api.Controllers
@@ -28,14 +29,20 @@ namespace WebApiTest.Api.Controllers
         //api/companies
 
         [HttpGet]
-        [HttpHead]
-        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompanies()
+        public async Task<ActionResult <MsgReturn<object>>> GetCompanies()
         {
             //throw new Exception("测试 抛出 异常 ");
             var companies = await _companyRepository.GetCompaniesAsync();
             //从 companies (list) 转换 成为 companyDto(IEnumerable)
             var companyDtos = _mapper.Map<IEnumerable<CompanyDto>>(companies);
-            return Ok(companyDtos);
+            return Ok(new MsgReturn<object>
+            {
+                Msg = "查询公司列表成功",
+                Response = new
+                {
+                    List = companyDtos
+                }
+            });
         }
 
         //api/companies/123

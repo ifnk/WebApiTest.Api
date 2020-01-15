@@ -1,8 +1,6 @@
 /WebApiTest.Api/obj
 /WebApiTest.Api/bin
 
-
-
 /WebApiTest.Api/node_modules/
 **/node_modules/
 .idea

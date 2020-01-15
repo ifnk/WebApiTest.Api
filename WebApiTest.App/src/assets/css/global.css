@@ -19,8 +19,20 @@ html, body, #app {
 }
 
 
+.el-dialog__body {
+    padding-top: 0 !important;
+}
+
+
 /*padding 相关 */
 .pt10{ padding-top: 10px; }
 .pt20{ padding-top: 20px; }
 .pt30{ padding-top: 30px; }
 .pt40{ padding-top: 40px; }
+
+/*margin 相关 */
+.mt10{ margin-top: 10px; }
+.mt15{ margin-top: 15px; }
+.mt20{ margin-top: 20px; }
+.mt30{ margin-top: 30px; }
+.mt40{ margin-top: 40px; }

@@ -11,7 +11,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-input placeholder="请输入用户名" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button slot="append" icon="el-icon-search"/>
           </el-input>
         </el-col>
         <el-col :span="4">

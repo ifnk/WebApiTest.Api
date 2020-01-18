@@ -76,6 +76,14 @@ Axios.interceptors.response.use(
           duration: 10000 // 这里显示10秒
         })
       }
+      if (error.response.status === 403) {
+        Vue.prototype.$message({
+          showClose: true,
+          message: '你没有这个操作的权限!',
+          type: 'error',
+          duration: 10000 // 这里显示10秒
+        })
+      }
       if (error.response.status === 404) {
         Vue.prototype.$message({
           showClose: true,

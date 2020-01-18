@@ -12,10 +12,10 @@ namespace WebApiTest.Api.Profile
     {
         public CompanyProfile()
         {
-            CreateMap<Company, CompanyDto>() 
+            CreateMap<Company, CompanyDto>()
                 .ForMember(dest => dest.CompanyName,
-                opt=>opt.MapFrom(src=>src.Name)
-                    )
+                    opt => opt.MapFrom(src => src.Name)
+                )
                 ;
         }
     }

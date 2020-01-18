@@ -29,10 +29,10 @@ namespace WebApiTest.Api.Controllers
         //api/companies
 
         [HttpGet]
-        public async Task<ActionResult <MsgReturn<object>>> GetCompanies()
+        public async Task<ActionResult <MsgReturn<object>>> GetCompanies([FromQuery] QueryParameter queryParameter)
         {
             //throw new Exception("测试 抛出 异常 ");
-            var companies = await _companyRepository.GetCompaniesAsync();
+            var companies = await _companyRepository.GetCompaniesAsync(queryParameter);
             //从 companies (list) 转换 成为 companyDto(IEnumerable)
             var companyDtos = _mapper.Map<IEnumerable<CompanyDto>>(companies);
             return Ok(new MsgReturn<object>
@@ -40,7 +40,10 @@ namespace WebApiTest.Api.Controllers
                 Msg = "查询公司列表成功",
                 Response = new
                 {
-                    List = companyDtos
+                    List = companyDtos,
+                    totalCount = companies.TotalItemsCount,
+                    pageIndex = companies.PageIndex,
+                    pageSize = companies.PageSize
                 }
             });
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiTest.Api.Data;
 using WebApiTest.Api.Entities;
@@ -19,9 +20,24 @@ namespace WebApiTest.Api.Repostories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Company>> GetCompaniesAsync()
+        public async Task<PaginatedList<Company>> GetCompaniesAsync([FromQuery] QueryParameter queryParameter)
         {
-            return await _context.Companies.ToListAsync();
+            var query = _context.Companies.AsQueryable();
+            if (!string.IsNullOrEmpty(queryParameter.Key))
+            {
+                string key = "%" + queryParameter.Key.ToLowerInvariant() + "%";
+                query = query.Where(x => EF.Functions.Like(x.Name, key));
+            }
+
+            var count = await query.CountAsync();
+
+            var data = await query
+                .Skip((queryParameter.PageIndex - 1) * queryParameter.PageSize)
+                .Take(queryParameter.PageSize)
+                .ToListAsync();
+
+
+            return new PaginatedList<Company>(queryParameter.PageIndex, queryParameter.PageSize, count, data);
         }
 
         public async Task<Company> GetCompanyAsync(Guid companyId)

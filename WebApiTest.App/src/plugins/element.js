@@ -27,6 +27,7 @@ import {
   TableColumn,
   Dialog,
   MessageBox,
+  Notification,
   Message,
   Loading
 } from 'element-ui'
@@ -59,6 +60,7 @@ Vue.use(Table)
 Vue.use(TableColumn)
 
 // 这个 是 script 里面的方法 所以要全局挂载到 vue (this里面)
-Vue.prototype.$elLoading = Loading
-Vue.prototype.$message = Message
-Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$elLoading = Loading // 加载框
+Vue.prototype.$message = Message // 消息框
+Vue.prototype.$confirm = MessageBox.confirm // 确认框
+Vue.prototype.$notify = Notification // 通知

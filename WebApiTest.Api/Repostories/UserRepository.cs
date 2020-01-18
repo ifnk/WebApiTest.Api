@@ -25,7 +25,7 @@ namespace WebApiTest.Api.Repostories
 
             if (!string.IsNullOrEmpty(queryParameter.Key))
             {
-                string key = "%" + queryParameter.Key.ToLowerInvariant() + "%";
+                string key = "%" + queryParameter.Key.ToLowerInvariant().Trim() + "%";
                 query = query.Where(x => EF.Functions.Like(x.Name, key));
             }
 
@@ -85,6 +85,7 @@ namespace WebApiTest.Api.Repostories
 
             return await _context.Users.AnyAsync(x => x.Id == userId);
         }
+
 
         public async Task<bool> UserExistByNameAsync(string userName)
         {

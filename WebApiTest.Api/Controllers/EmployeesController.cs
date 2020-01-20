@@ -42,7 +42,6 @@ namespace WebApiTest.Api.Controllers
                     List = employeeDtos,
                 }
             });
-
         }
 
         [HttpGet("{employeeId}")]
@@ -57,6 +56,25 @@ namespace WebApiTest.Api.Controllers
             if (employee == null) return NotFound();
             var employeeDto = _mapper.Map<EmployeeDto>(employee);
             return Ok(employeeDto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<MsgReturn<EmployeeDto>>> CreateEmployeeForCompany(Guid companyId,
+            EmployeeAddDto employeeAddDto)
+        {
+            //添加前检查一下是不是有这个公司存在 
+            if (!await _companyRepository.CompanyExistAsync(companyId))
+                return Ok(new MsgReturn<string>() {Msg = "要添加的公司不存在!", Success = false});
+            //先将 addDto 转换 为 实体 employee
+            var employee = _mapper.Map<Employee>(employeeAddDto);
+            //调用  ef core add 方法 
+            _companyRepository.AddEmployee(companyId, employee);
+            if (!await _companyRepository.SaveAsync())
+                return Ok(new MsgReturn<string>() {Msg = "添加员工没有成功", Success = false});
+            //这时候 employee 已经 有了 id 主键
+            //将他转换 成 employeeDto 返回 给 app
+            var employeeDto = _mapper.Map<EmployeeDto>(employee);
+            return Ok(new MsgReturn<EmployeeDto>() {Msg = "添加成功",Response = employeeDto});
         }
     }
 }

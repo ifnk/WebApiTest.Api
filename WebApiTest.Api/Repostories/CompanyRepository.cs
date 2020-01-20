@@ -52,9 +52,12 @@ namespace WebApiTest.Api.Repostories
             if (company != null)
             {
                 company.Id = Guid.NewGuid();
-                foreach (var employee in company.Employees)
+                if (company.Employees != null)
                 {
-                    employee.Id = Guid.NewGuid();
+                    foreach (var employee in company.Employees)
+                    {
+                        employee.Id = Guid.NewGuid();
+                    }
                 }
 
                 _context.Companies.Add(company);

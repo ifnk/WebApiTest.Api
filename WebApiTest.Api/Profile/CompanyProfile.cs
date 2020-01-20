@@ -15,8 +15,13 @@ namespace WebApiTest.Api.Profile
             CreateMap<Company, CompanyDto>()
                 .ForMember(dest => dest.CompanyName,
                     opt => opt.MapFrom(src => src.Name)
-                )
+                );
+            CreateMap<CompanyAddDto, Company>()
+                .ForMember(
+                    dest => dest.Employees, opt => opt.MapFrom(src => src.EmployeedAddDtos))
                 ;
+            CreateMap<Company, CompanyAddDto>()
+                .ForMember(dest => dest.EmployeedAddDtos, opt => opt.MapFrom(src => src.Employees));
         }
     }
 }

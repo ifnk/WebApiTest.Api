@@ -3,6 +3,6 @@
     public enum Gender
     {
         男 = 1,
-        女 = 0
+        女 = 2
     }
 }

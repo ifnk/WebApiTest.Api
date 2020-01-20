@@ -16,8 +16,10 @@ namespace WebApiTest.Api.Profile
                 )
                 .ForMember(dest => dest.Age,
                     opt => opt.MapFrom(src => DateTime.Now.Year - src.DateOfBirth.Year)
-                )
-                ;
+                );
+            CreateMap<EmployeeAddDto, Employee>();
+            CreateMap<Employee, EmployeeAddDto>();
+
         }
     }
 }

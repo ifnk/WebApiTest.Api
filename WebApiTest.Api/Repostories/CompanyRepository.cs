@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -28,17 +27,18 @@ namespace WebApiTest.Api.Repostories
                 string key = "%" + queryParameter.Key.ToLowerInvariant() + "%";
                 query = query.Where(x => EF.Functions.Like(x.Name, key));
             }
-
-            var count = await query.CountAsync();
-
-            var data = await query
-                .Skip((queryParameter.PageIndex - 1) * queryParameter.PageSize)
-                .Take(queryParameter.PageSize)
-                .ToListAsync();
-
-
-            return new PaginatedList<Company>(queryParameter.PageIndex, queryParameter.PageSize, count, data);
+            return await PaginatedList<Company>.CreateAsync(query, queryParameter.PageIndex, queryParameter.PageSize);
         }
+
+        public async Task<IEnumerable<Company>> GetCompaniesAsync(IEnumerable<Guid> companyIds)
+        {
+            if (companyIds == null) throw new ArgumentNullException(nameof(companyIds));
+            return await _context.Companies
+                .Where(x => companyIds.Contains(x.Id))
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+        }
+
 
         public async Task<Company> GetCompanyAsync(Guid companyId)
         {
@@ -74,8 +74,8 @@ namespace WebApiTest.Api.Repostories
 
         public void DeleteCompany(Company company)
         {
-            if (company != null) _context.Companies.Remove(company);
-            throw new ArgumentNullException(nameof(company));
+            if (company == null) throw new ArgumentNullException(nameof(company));
+            _context.Companies.Remove(company);
         }
 
         public async Task<bool> CompanyExistAsync(Guid companyId)
@@ -88,7 +88,7 @@ namespace WebApiTest.Api.Repostories
             return await _context.Companies.AnyAsync(x => x.Id == companyId);
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeeAsync(Guid companyId)
+        public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId)
         {
             if (companyId == Guid.Empty)
             {
@@ -141,8 +141,8 @@ namespace WebApiTest.Api.Repostories
 
         public void DeleteEmployee(Employee employee)
         {
-            if (employee != null) _context.Employees.Remove(employee);
-            throw new ArgumentNullException(nameof(employee));
+            if (employee == null) throw new ArgumentNullException(nameof(employee));
+            _context.Employees.Remove(employee);
         }
 
         public async Task<bool> SaveAsync()

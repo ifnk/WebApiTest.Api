@@ -19,6 +19,8 @@ namespace WebApiTest.Api.Profile
                 );
             CreateMap<EmployeeAddDto, Employee>();
             CreateMap<Employee, EmployeeAddDto>();
+            CreateMap<Employee, EmployeeUpdateDto>();
+            CreateMap<EmployeeUpdateDto, Employee>();
 
         }
     }

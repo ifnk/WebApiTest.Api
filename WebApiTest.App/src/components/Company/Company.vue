@@ -14,6 +14,9 @@
       <el-col :span="4">
         <el-button @click="addCompanyClick" type="primary">添加公司</el-button>
       </el-col>
+      <el-col :span="4">
+        <el-button @click="test" type="primary">测试</el-button>
+      </el-col>
     </el-row>
 
     <!--添加公司-->
@@ -89,7 +92,7 @@ export default {
       addCompanyForm: {
         companyName: ''
       },
-      addCompanyVisible: true,
+      addCompanyVisible: false,
       // 查询参数
       employeeDialogInfo: {
         // visable: false,

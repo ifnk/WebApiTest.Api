@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +27,8 @@ namespace WebApiTest.Api.Controllers
 
         //api/companies
 
-        [HttpGet]
+        [HttpGet(Name = nameof(GetCompanies))]
+        [HttpHead]
         public async Task<ActionResult<MsgReturn<object>>> GetCompanies([FromQuery] QueryParameter queryParameter)
         {
             //throw new Exception("测试 抛出 异常 ");
@@ -41,7 +41,7 @@ namespace WebApiTest.Api.Controllers
                 Response = new
                 {
                     List = companyDtos,
-                    totalCount = companies.TotalItemsCount,
+                    totalCount = companies.TotalCount,
                     pageIndex = companies.PageIndex,
                     pageSize = companies.PageSize
                 }
@@ -56,8 +56,8 @@ namespace WebApiTest.Api.Controllers
             var company = await _companyRepository.GetCompanyAsync(companyId);
             //如果 资源 不存在 
             if (company == null) return NotFound();
-            var CompanyDto = _mapper.Map<CompanyDto>(company);
-            return Ok(CompanyDto);
+            var companyDto = _mapper.Map<CompanyDto>(company);
+            return Ok(companyDto);
         }
 
         [HttpPost]
@@ -66,11 +66,25 @@ namespace WebApiTest.Api.Controllers
             if (companyAddDto == null) return Ok(new MsgReturn<string>() {Success = false, Msg = "没有传进来公司!"});
             var company = _mapper.Map<Company>(companyAddDto); //此时 company  id 为 0000-000-00 
             _companyRepository.AddCompany(company); //执行添加操作后 
-            if (!await _companyRepository.SaveAsync() ) //并且保存 操作 以后 company 就 会多 一个 id 为 0b95506b-29df-44ac-9459-62302cd45fd5
+            if (!await _companyRepository.SaveAsync()
+            ) //并且保存 操作 以后 company 就 会多 一个 id 为 0b95506b-29df-44ac-9459-62302cd45fd5
                 return Ok(new MsgReturn<string>() {Success = false, Msg = "未知原因，没有添加上公司……"});
             var companyDto = _mapper.Map<CompanyDto>(company); //将插入完成的数据返回去
             return Ok(new MsgReturn<CompanyDto>()
                 {Msg = "创建成功!", Response = companyDto}); //所以返回 创建 成功 的 companyDto 是 有 id 的!
+        }
+
+        [HttpDelete("{companyId}")]
+        public async Task<ActionResult<MsgReturn<CompanyDto>>> DeleteCompany(Guid companyId)
+        {
+            var companyEntity = await _companyRepository.GetCompanyAsync(companyId);
+            if (companyEntity == null) return Ok(new MsgReturn<string>() {Success = false, Msg = "没有找到对应的id的公司"});
+            //要连 公司底下的员工也一并删除 的话， 就必须 先 把公司 底下的员工 查询出来 
+            await _companyRepository.GetEmployeesAsync(companyId); //先查询 公司底下的员工
+            _companyRepository.DeleteCompany(companyEntity); //然后 一并删除 掉
+            if (!await _companyRepository.SaveAsync())
+                return Ok(new MsgReturn<string>() {Msg = "没有删除上", Success = false});
+            return Ok(new MsgReturn<EmployeeDto>() {Msg = "删除成功!"});
         }
     }
 }

@@ -30,7 +30,7 @@ namespace WebApiTest.Api.Data
                 .HasOne(x => x.Company) //有一个父级
                 .WithMany(x => x.Employees) //父级有很多员工 
                 .HasForeignKey(x => x.CompanyId) //外键是 companyId 和 company 表的 主键Id 对应
-                .OnDelete(DeleteBehavior.Restrict); //关联删除 
+                .OnDelete(DeleteBehavior.Cascade); //删除 公司的时候 把公司 地下 的员工 一并删除 了
 
 
             //设置 种子数据 

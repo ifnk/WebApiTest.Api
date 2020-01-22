@@ -57,7 +57,7 @@ namespace WebApiTest.Api.Controllers
                 Response = new
                 {
                     List = users,
-                    totalCount = users.TotalItemsCount,
+                    totalCount = users.TotalCount,
                     pageIndex = users.PageIndex,
                     pageSize = users.PageSize
                 }

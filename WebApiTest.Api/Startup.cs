@@ -32,7 +32,40 @@ namespace WebApiTest.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            //添加自定义返回错误报告 
+            //{
+            //    "type": "http://www.baidu.com",
+            //    "title": "有错误",
+            //    "status": 422,
+            //    "detail": "请看详细信息",
+            //    "instance": "/api/companies/64c208b0-e801-41c9-92f4-cdb76c5f3f1c/employees",
+            //    "traceId": "0HLSUA43LSUOV:00000001",
+            //    "errors": {
+            //        "EmployeeAddDto": [
+            //            "员工编号和姓名不能相同!"
+            //        ]
+            //    }
+            //}
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(setup =>
+            {
+                setup.InvalidModelStateResponseFactory = context =>
+                {
+                    var problemDetails = new ValidationProblemDetails(context.ModelState)
+                    {
+                        Type = "http://www.baidu.com",
+                        Title = "有错误",
+                        Status = StatusCodes.Status422UnprocessableEntity,
+                        Detail = "请看详细信息",
+                        Instance = context.HttpContext.Request.Path
+                    };
+                    problemDetails.Extensions.Add("traceId", context.HttpContext.TraceIdentifier);
+                    return new UnprocessableEntityObjectResult(problemDetails)
+                    {
+                        ContentTypes = {"application/problem+json"}
+                    };
+                };
+            });
             //每一次http请求 的生命 周期 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

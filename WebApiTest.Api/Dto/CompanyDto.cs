@@ -6,7 +6,7 @@ using WebApiTest.Api.Entities;
 
 namespace WebApiTest.Api.Dto
 {
-    public class CompanyDto
+    public class CompanyDto  //返回给app 的资源 
     {
         public Guid Id { get; set; }
         public string CompanyName { get; set; }

@@ -12,6 +12,7 @@ namespace WebApiTest.Api.Services
     {
         //公司相关 的接口方法 
         Task<PaginatedList<Company>> GetCompaniesAsync([FromQuery] QueryParameter queryParameter);
+        Task<IEnumerable<Company>> GetCompaniesAsync(IEnumerable<Guid> companyIds);
         Task<Company> GetCompanyAsync(Guid companyId);
         void AddCompany(Company company);
         void UpdateCompany(Company company);
@@ -20,7 +21,7 @@ namespace WebApiTest.Api.Services
 
 
         //员工相关 的接口方法 
-        Task<IEnumerable<Employee>> GetEmployeeAsync(Guid companyId);
+        Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId);
         Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId);
         void AddEmployee(Guid companyId, Employee employee);
         void UpdateEmployee(Employee employee);

@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
 import { showLoading, hideLoading } from './common/loading'
+import utils from './common/utils'
+import questionHub from './Hub/questionHub'
 
 // 导入字体图标库
 import './assets/fonts/iconfont.css'
@@ -10,8 +12,13 @@ import './assets/fonts/iconfont.css'
 import './assets/css/global.css'
 
 import Axios from 'axios'
+// 引用公共组件
+import PageNation from './components/CommonComponents/PageNation'
+Vue.component('PageNation', PageNation)
 
+Vue.prototype.utils = utils
 Vue.prototype.$http = Axios
+// Vue.use(questionHub)
 
 // 配置请求 的根路径
 // Axios.defaults.baseURL = 'http://localhost:5210/'

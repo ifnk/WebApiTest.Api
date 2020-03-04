@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 
 namespace WebApiTest.Api.Dto
 {

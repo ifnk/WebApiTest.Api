@@ -33,7 +33,10 @@
             <el-button @click="getUserList()" slot="append" icon="el-icon-search"/>
           </el-input>
         </el-col>
-        <el-col :span="4">
+
+        <el-col :span="12">
+          <el-button @click="registerEvent" type="success">注册事件</el-button>
+          <el-button @click="logoutEvent" type="warning">注销事件</el-button>
           <el-button @click="openDialog" type="primary">添加用户</el-button>
         </el-col>
       </el-row>
@@ -66,7 +69,7 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="openDialog(scope.row.id)" icon="el-icon-edit" type="primary"/>
-              <el-button size="mini" icon="el-icon-delete" type="danger"/>
+              <el-button size="mini" @click="deleteUser(scope.row.id)" icon="el-icon-delete" type="danger"/>
               <el-tooltip :enterable="false" effect="dark" content="分配权限" placement="top-start">
                 <el-button size="mini" icon="el-icon-setting" type="warning"/>
               </el-tooltip>
@@ -125,6 +128,16 @@ export default {
     }
   },
   methods: {
+
+    async registerEvent () {
+      const { data: res } = await this.$http.get(`api/coordinate/registerEvente${window.sessionStorage.getItem('userId')}`)
+      this.activePath = window.sessionStorage.getItem('activePath')
+      this.$message.success(res.msg)
+    },
+    async logoutEvent () {
+      const { data: res } = await this.$http.get(`api/coordinate/logoutEvent`)
+      this.$message.success(res.msg)
+    },
     async renderEditUserForm (userId) {
       this.confirmType = 'edit'
       const { data: res } = await this.$http.get(`api/users/${userId}`)
@@ -138,11 +151,18 @@ export default {
       this.dialogTitle = '添加用户'
       this.confirmType = 'add'
     },
+    async deleteUser (userId) {
+      const { data: res } = await this.$http.delete(`api/users/${userId}`)
+      if (!res.success) return this.$message.error(res.msg)
+      this.getUserList()
+      this.$message.success(res.msg)
+    },
     async openDialog (e) {
       this.userDialogVisible = true
       return typeof (e) === 'object' ? this.renderAddUserForm() : this.renderEditUserForm(e)
     },
     confirmUserDialogClick () {
+      // console.log(this.confirmType )
       // 先对表单进行 预校验
       this.$refs.userFormRef.validate(async valid => {
         if (!valid) return // 没有校验通过

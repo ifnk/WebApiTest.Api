@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 
 namespace WebApiTest.Api.Data
 {
@@ -14,6 +11,10 @@ namespace WebApiTest.Api.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Coordinate> Coordinates { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
         public DbSet<Company> Companies { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
@@ -25,12 +26,24 @@ namespace WebApiTest.Api.Data
             modelBuilder.Entity<Company>().Property(x => x.Name)
                 .IsRequired() //名称必填
                 .HasMaxLength(100); //最大长度100 
-            //设置 数据 表之间 的关系 (外键)
+            // //设置 数据 表之间 的关系 (外键)
             modelBuilder.Entity<Employee>()
                 .HasOne(x => x.Company) //有一个父级
                 .WithMany(x => x.Employees) //父级有很多员工 
                 .HasForeignKey(x => x.CompanyId) //外键是 companyId 和 company 表的 主键Id 对应
                 .OnDelete(DeleteBehavior.Cascade); //删除 公司的时候 把公司 地下 的员工 一并删除 了
+            modelBuilder.Entity<Answer>()
+                .HasOne(x => x.Question)
+                .WithMany(x => x.Answers)
+                .HasForeignKey(x => x.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //设置 user 表和  coordinate 坐标表之间 的关系 
+            modelBuilder.Entity<Coordinate>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Coordinates)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // 删除 员工的时候 将 坐标 一并删除 
 
 
             //设置 种子数据 

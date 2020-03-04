@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Api.Dto;
 using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 using WebApiTest.Api.Services;
 
 namespace WebApiTest.Api.Controllers
@@ -26,6 +27,25 @@ namespace WebApiTest.Api.Controllers
         }
 
         //api/companies
+        [HttpGet("employees")]
+        public async Task<ActionResult<MsgReturn<object>>> GetAllEmployees([FromQuery] QueryParameter queryParameter)
+        {
+            if (queryParameter == null) throw new ArgumentNullException(nameof(queryParameter));
+            var employeesEntity = await _companyRepository.GetEmployeesWithAllCompany(queryParameter);
+            var employeeDtos = _mapper.Map<IEnumerable<EmployeeDto>>(employeesEntity);
+            return Ok(new MsgReturn<object>()
+            {
+                Msg = "查询所有员工成功!",
+                Response = new
+                {
+                    List = employeeDtos,
+                    totalCount = employeesEntity.TotalCount,
+                    pageIndex = employeesEntity.PageIndex,
+                    pageSize = employeesEntity.PageSize
+                }
+            });
+        }
+
 
         [HttpGet(Name = nameof(GetCompanies))]
         [HttpHead]
@@ -59,6 +79,7 @@ namespace WebApiTest.Api.Controllers
             var companyDto = _mapper.Map<CompanyDto>(company);
             return Ok(companyDto);
         }
+
 
         [HttpPost]
         public async Task<ActionResult<MsgReturn<CompanyDto>>> AddCompany(CompanyAddDto companyAddDto)

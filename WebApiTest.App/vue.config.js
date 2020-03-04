@@ -11,7 +11,7 @@ module.exports = {
       '/api': { // 如果请求 的是  api 为开头 的 ，就会找 这个  http://localhost:8080 端口号
         // /api/login ==> localhost:8080/api/login
         // /apb/login ==> localhost:2364/api/login
-        target: 'http://localhost:5210', // 这里改成你自己的后端api 端口地址 ，记得 每次修改，都需要重新 build
+        target: 'https://localhost:5210', // 这里改成你自己的后端api 端口地址 ，记得 每次修改，都需要重新 build
         ws: true,
         changeOrigin: true,
         pathRewrite: {

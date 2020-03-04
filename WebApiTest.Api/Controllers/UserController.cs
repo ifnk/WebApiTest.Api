@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +7,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using WebApiTest.Api.Dto;
 using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 using WebApiTest.Api.Services;
 
 namespace WebApiTest.Api.Controllers
@@ -31,6 +30,7 @@ namespace WebApiTest.Api.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+
         //api/users  post请求 添加 用户 
         [Authorize]
         [HttpPost]
@@ -38,14 +38,36 @@ namespace WebApiTest.Api.Controllers
         {
             if (await _userRepository.UserExistByNameAsync(user.Name))
                 return Ok(new MsgReturn<object> {Msg = "该用户名已存在!", Success = false});
-            _userRepository.AddUser(user);
-            if (!await _userRepository.SaveAsync())
-                return Ok(new MsgReturn<object> {Msg = "未知原因，没有添加上用户", Success = false});
+            for (int i = 0; i < 3; i++)
+            {
+                _userRepository.Add(new User()
+                {
+                    Name = "nono",
+                    Password= "wudi"
+                });
+                await _userRepository.SaveAsync();
+                
+            }
+
+            // if (!await _userRepository.SaveAsync())
+            //     return Ok(new MsgReturn<object> {Msg = "未知原因，没有添加上用户", Success = false});
             return Ok(new MsgReturn<object> {Msg = "添加用户成功!",});
         }
 
-        //api/users
         [Authorize]
+        [HttpDelete("{userId}")]
+        public async Task<ActionResult<MsgReturn<object>>> DeleteUser(Guid userId)
+        {
+            var userEntity = await _userRepository.GetUserAsync(userId);
+            if (userEntity == null) return Ok(new MsgReturn<object> {Msg = "没有找到要删除的用户!", Success = false});
+            _userRepository.DeleteUser(userEntity);
+            if (!await _userRepository.SaveAsync())
+                return Ok(new MsgReturn<object> {Msg = "删除用户失败……", Success = false});
+            return Ok(new MsgReturn<object> {Msg = "删除用户成功!"});
+        }
+
+        //api/users
+        // [Authorize]
         [HttpGet]
         public async Task<ActionResult<MsgReturn<object>>> GetUsers([FromQuery] QueryParameter queryParameter)
         {
@@ -95,7 +117,7 @@ namespace WebApiTest.Api.Controllers
         }
 
         //api/users/123
-        [Authorize]
+        // [Authorize]
         [HttpGet("{userId}")]
         public async Task<ActionResult<User>> GetUser(Guid userId)
         {
@@ -122,7 +144,7 @@ namespace WebApiTest.Api.Controllers
                     Msg = "登录成功!",
                     Response = new
                     {
-                        token = token,
+                        token,
                         user = res
                     }
                 });

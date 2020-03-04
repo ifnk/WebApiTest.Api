@@ -1,11 +1,10 @@
 ﻿using System;
 
 // 员工
-namespace WebApiTest.Api.Entities
+namespace WebApiTest.Api.Entities.DatabaseEntities
 {
-    public class Employee
+    public class Employee : BaseEntity
     {
-        public Guid Id { get; set; }
         public Guid CompanyId { get; set; }
         public string EmployeeNo { get; set; }
         public string FirstName { get; set; }

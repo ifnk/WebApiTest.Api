@@ -29,6 +29,7 @@ import {
   MessageBox,
   Notification,
   Message,
+  Divider,
   Loading
 } from 'element-ui'
 
@@ -58,6 +59,7 @@ Vue.use(Row)
 Vue.use(Col)
 Vue.use(Table)
 Vue.use(TableColumn)
+Vue.use(Divider)
 
 // 这个 是 script 里面的方法 所以要全局挂载到 vue (this里面)
 Vue.prototype.$elLoading = Loading // 加载框

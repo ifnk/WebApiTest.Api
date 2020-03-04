@@ -4,7 +4,7 @@
     <el-header>
       <div class="l_header">
         <img src="../assets/lufw.jpg" alt="">
-        <span>电商后台管理系统</span>
+        <span>webApiTest </span>
       </div>
       <el-button @click="logout" type="info">退出</el-button>
     </el-header>
@@ -48,6 +48,18 @@
               <template slot="title">
                 <i class="el-icon-menu"/>
                 <span>公司列表</span>
+              </template>
+            </el-menu-item>
+            <el-menu-item @click="saveNavState('employee')" index="employee">
+              <template slot="title">
+                <i class="el-icon-menu"/>
+                <span>员工列表</span>
+              </template>
+            </el-menu-item>
+            <el-menu-item @click="saveNavState('question')" index="question">
+              <template slot="title">
+                <i class="el-icon-menu"/>
+                <span>问题列表</span>
               </template>
             </el-menu-item>
           </el-submenu>

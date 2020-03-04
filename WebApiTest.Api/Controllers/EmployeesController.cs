@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Api.Dto;
 using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 using WebApiTest.Api.Services;
 
 namespace WebApiTest.Api.Controllers

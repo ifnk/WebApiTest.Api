@@ -6,34 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiTest.Api.Data;
 using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 using WebApiTest.Api.Services;
 
-namespace WebApiTest.Api.Repostories
+namespace WebApiTest.Api.Repositories
 {
-    public class CompanyRepository : ICompanyRepository
+    public class CompanyRepository : BaseRepository<Company>, ICompanyRepository
     {
-        private readonly AppDbContext _context;
-
-        public CompanyRepository(AppDbContext context)
+        public CompanyRepository(AppDbContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<PaginatedList<Company>> GetCompaniesAsync([FromQuery] QueryParameter queryParameter)
         {
-            var query = _context.Companies.AsQueryable();
+            if (queryParameter == null) throw new ArgumentNullException(nameof(queryParameter));
+            var query = Context.Companies.AsQueryable();
             if (!string.IsNullOrEmpty(queryParameter.Key))
             {
                 string key = "%" + queryParameter.Key.ToLowerInvariant() + "%";
                 query = query.Where(x => EF.Functions.Like(x.Name, key));
             }
+
             return await PaginatedList<Company>.CreateAsync(query, queryParameter.PageIndex, queryParameter.PageSize);
         }
 
         public async Task<IEnumerable<Company>> GetCompaniesAsync(IEnumerable<Guid> companyIds)
         {
             if (companyIds == null) throw new ArgumentNullException(nameof(companyIds));
-            return await _context.Companies
+            return await Context.Companies
                 .Where(x => companyIds.Contains(x.Id))
                 .OrderBy(x => x.Name)
                 .ToListAsync();
@@ -44,7 +44,7 @@ namespace WebApiTest.Api.Repostories
         {
             return companyId == Guid.Empty
                 ? throw new ArgumentNullException(nameof(companyId))
-                : await _context.Companies.FirstOrDefaultAsync(x => x.Id == companyId);
+                : await Context.Companies.FirstOrDefaultAsync(x => x.Id == companyId);
         }
 
         public void AddCompany(Company company)
@@ -60,7 +60,7 @@ namespace WebApiTest.Api.Repostories
                     }
                 }
 
-                _context.Companies.Add(company);
+                Context.Companies.Add(company);
             }
             else
             {
@@ -75,7 +75,7 @@ namespace WebApiTest.Api.Repostories
         public void DeleteCompany(Company company)
         {
             if (company == null) throw new ArgumentNullException(nameof(company));
-            _context.Companies.Remove(company);
+            Context.Companies.Remove(company);
         }
 
         public async Task<bool> CompanyExistAsync(Guid companyId)
@@ -85,7 +85,25 @@ namespace WebApiTest.Api.Repostories
                 throw new ArgumentNullException(nameof(companyId));
             }
 
-            return await _context.Companies.AnyAsync(x => x.Id == companyId);
+            return await Context.Companies.AnyAsync(x => x.Id == companyId);
+        }
+
+        public async Task<PaginatedList<Employee>> GetEmployeesWithAllCompany(QueryParameter queryParameter)
+        {
+            if (queryParameter == null) throw new ArgumentNullException(nameof(queryParameter));
+            var query = Context.Employees.AsQueryable();
+            if (!string.IsNullOrEmpty(queryParameter.Key))
+            {
+                string key = "%" + queryParameter.Key.ToLowerInvariant() + "%";
+                // query = query.Where(x => EF.Functions.Like(
+                //     x.FirstName, key));
+                query = query
+                    .Where(x => x.FirstName.Contains(key)
+                                || x.LastName.Contains(key));
+            }
+
+            query = query.Include(x => x.Company); // 联表查询下
+            return await PaginatedList<Employee>.CreateAsync(query, queryParameter.PageIndex, queryParameter.PageSize);
         }
 
         public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId)
@@ -95,7 +113,7 @@ namespace WebApiTest.Api.Repostories
                 throw new ArgumentNullException(nameof(companyId));
             }
 
-            return await _context.Employees
+            return await Context.Employees
                 .Where(x => x.CompanyId == companyId)
                 .OrderBy(x => x.EmployeeNo)
                 .ToListAsync();
@@ -113,7 +131,7 @@ namespace WebApiTest.Api.Repostories
                 throw new ArgumentNullException(nameof(employeeId));
             }
 
-            return await _context.Employees
+            return await Context.Employees
                 .Where(x => x.CompanyId == companyId && x.Id == employeeId)
                 .FirstOrDefaultAsync();
         }
@@ -132,7 +150,7 @@ namespace WebApiTest.Api.Repostories
 
             employee.CompanyId = companyId;
 
-            _context.Employees.Add(employee);
+            Context.Employees.Add(employee);
         }
 
         public void UpdateEmployee(Employee employee)
@@ -142,12 +160,7 @@ namespace WebApiTest.Api.Repostories
         public void DeleteEmployee(Employee employee)
         {
             if (employee == null) throw new ArgumentNullException(nameof(employee));
-            _context.Employees.Remove(employee);
-        }
-
-        public async Task<bool> SaveAsync()
-        {
-            return await _context.SaveChangesAsync() >= 0;
+            Context.Employees.Remove(employee);
         }
     }
 }

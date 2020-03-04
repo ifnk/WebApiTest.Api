@@ -16,14 +16,45 @@ namespace WebApiTest.Api.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.0");
 
-            modelBuilder.Entity("WebApiTest.Api.Entities.Company", b =>
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Answer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Body")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Introduction")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -38,30 +69,67 @@ namespace WebApiTest.Api.Migrations
                         new
                         {
                             Id = new Guid("64c208b0-e801-41c9-92f4-cdb76c5f3f1c"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 801, DateTimeKind.Local).AddTicks(1900),
                             Introduction = "不好的公司",
+                            IsRemoved = false,
                             Name = "百度"
                         },
                         new
                         {
                             Id = new Guid("b9179c40-52f9-42ce-8f67-6972bd297e59"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 801, DateTimeKind.Local).AddTicks(9816),
                             Introduction = "微薄",
+                            IsRemoved = false,
                             Name = "新浪"
                         },
                         new
                         {
                             Id = new Guid("489748f7-db29-4e9b-8a60-4c655bf7b9a4"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 801, DateTimeKind.Local).AddTicks(9875),
                             Introduction = "买手机 的",
+                            IsRemoved = false,
                             Name = "小米"
                         });
                 });
 
-            modelBuilder.Entity("WebApiTest.Api.Entities.Employee", b =>
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Coordinate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("X")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Coordinates");
+                });
+
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("CompanyId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateOfBirth")
@@ -74,6 +142,9 @@ namespace WebApiTest.Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Gender")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRemoved")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
@@ -90,69 +161,113 @@ namespace WebApiTest.Api.Migrations
                         {
                             Id = new Guid("d21af833-45a2-46ee-afe9-82886ee453bd"),
                             CompanyId = new Guid("64c208b0-e801-41c9-92f4-cdb76c5f3f1c"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 803, DateTimeKind.Local).AddTicks(5321),
                             DateOfBirth = new DateTime(1984, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeNo = "9527",
                             FirstName = "李",
                             Gender = 1,
+                            IsRemoved = false,
                             LastName = "言红"
                         },
                         new
                         {
                             Id = new Guid("857bb6b7-be73-4028-b5e9-bb70f155e8ad"),
                             CompanyId = new Guid("64c208b0-e801-41c9-92f4-cdb76c5f3f1c"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 803, DateTimeKind.Local).AddTicks(7538),
                             DateOfBirth = new DateTime(1991, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeNo = "9527",
                             FirstName = "徐",
-                            Gender = 1,
+                            Gender = 2,
+                            IsRemoved = false,
                             LastName = "东东"
                         },
                         new
                         {
                             Id = new Guid("ff5772d0-c235-4d19-84ef-b173c6d8f5f6"),
                             CompanyId = new Guid("b9179c40-52f9-42ce-8f67-6972bd297e59"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 803, DateTimeKind.Local).AddTicks(7818),
                             DateOfBirth = new DateTime(1984, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeNo = "9527",
                             FirstName = "菜",
                             Gender = 1,
+                            IsRemoved = false,
                             LastName = "吁困"
                         },
                         new
                         {
                             Id = new Guid("15fd5ef5-9fd0-4dbe-a885-43d2e9285857"),
                             CompanyId = new Guid("b9179c40-52f9-42ce-8f67-6972bd297e59"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 803, DateTimeKind.Local).AddTicks(7827),
                             DateOfBirth = new DateTime(1991, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeNo = "9527",
                             FirstName = "无",
-                            Gender = 1,
+                            Gender = 2,
+                            IsRemoved = false,
                             LastName = "一番"
                         },
                         new
                         {
                             Id = new Guid("7f5fa708-6327-4baf-abab-576b09c8b8c2"),
                             CompanyId = new Guid("489748f7-db29-4e9b-8a60-4c655bf7b9a4"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 803, DateTimeKind.Local).AddTicks(7836),
                             DateOfBirth = new DateTime(1984, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeNo = "9527",
                             FirstName = "雷",
                             Gender = 1,
+                            IsRemoved = false,
                             LastName = "不死"
                         },
                         new
                         {
                             Id = new Guid("a021b331-04cf-4d48-a5ce-0e38b0577f91"),
                             CompanyId = new Guid("489748f7-db29-4e9b-8a60-4c655bf7b9a4"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 803, DateTimeKind.Local).AddTicks(7841),
                             DateOfBirth = new DateTime(1991, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeNo = "9527",
                             FirstName = "路",
-                            Gender = 1,
+                            Gender = 2,
+                            IsRemoved = false,
                             LastName = "胃病"
                         });
                 });
 
-            modelBuilder.Entity("WebApiTest.Api.Entities.User", b =>
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Question", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
@@ -171,18 +286,51 @@ namespace WebApiTest.Api.Migrations
                         new
                         {
                             Id = new Guid("dc359997-b795-44df-9820-9516e60b8f9c"),
+                            CreateTime = new DateTime(2020, 2, 20, 19, 56, 49, 803, DateTimeKind.Local).AddTicks(3580),
+                            IsRemoved = false,
                             Name = "12",
                             Password = "12",
                             Status = true
                         });
                 });
 
-            modelBuilder.Entity("WebApiTest.Api.Entities.Employee", b =>
+            modelBuilder.Entity("WebApiTest.Department", b =>
                 {
-                    b.HasOne("WebApiTest.Api.Entities.Company", "Company")
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Answer", b =>
+                {
+                    b.HasOne("WebApiTest.Api.Entities.DatabaseEntities.Question", "Question")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Coordinate", b =>
+                {
+                    b.HasOne("WebApiTest.Api.Entities.DatabaseEntities.User", "User")
+                        .WithMany("Coordinates")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApiTest.Api.Entities.DatabaseEntities.Employee", b =>
+                {
+                    b.HasOne("WebApiTest.Api.Entities.DatabaseEntities.Company", "Company")
                         .WithMany("Employees")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

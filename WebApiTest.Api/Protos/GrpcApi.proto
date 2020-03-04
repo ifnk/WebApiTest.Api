@@ -1,0 +1,30 @@
+﻿syntax="proto3";
+
+option csharp_namespace="WebApiTest";
+
+package API;
+
+service Departments {
+	rpc GetAll (GetAllDepartmentsRequest) returns (GetAllDepartmentsResponse){}
+	rpc Add (AddDepartmentRequest) returns(AddDepartmentResponse){}
+}
+
+message GetAllDepartmentsRequest{}
+
+message GetAllDepartmentsResponse{
+	repeated Department  Departments=1;
+}
+message Department {
+         string Id = 1;
+         string Name = 2 ;
+}
+message AddDepartmentRequest{
+	Department department =1;
+}
+
+message AddDepartmentResponse{
+	Department department =1;
+}
+
+
+

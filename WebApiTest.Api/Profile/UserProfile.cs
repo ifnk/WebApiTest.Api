@@ -1,6 +1,7 @@
 ﻿using WebApiTest.Api.Controllers;
 using WebApiTest.Api.Dto;
 using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 
 namespace WebApiTest.Api.Profile
 {

@@ -1,4 +1,4 @@
-﻿namespace WebApiTest.Api.Controllers
+﻿namespace WebApiTest.Api.Dto
 {
     public class UserUpdateDto
     {

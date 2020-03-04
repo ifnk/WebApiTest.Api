@@ -1,4 +1,4 @@
-﻿namespace WebApiTest.Api.Entities
+﻿namespace WebApiTest.Api.Entities.DatabaseEntities
 {
     public enum Gender
     {

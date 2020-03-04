@@ -54,11 +54,11 @@ export default {
           // 验证不通过直接返回
           if (!valid) return
           const res = await this.$http.post('api/users/login', this.loginForm)
-          console.log(res.data)
           if (!res.data.success) return this.$message.error(res.data.msg)
           this.$message.success(res.data.msg)
           //  将 登录 成功 之后的 token,保存到客户端的 sessionStorage中
           window.sessionStorage.setItem('token', res.data.response.token)
+          window.sessionStorage.setItem('userId', res.data.response.user.id)
           //  接着 在 跳转 到首页
           return this.$router.push('/home')
         }

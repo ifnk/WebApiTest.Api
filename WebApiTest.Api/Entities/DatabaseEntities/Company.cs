@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WebApiTest.Api.Entities
+namespace WebApiTest.Api.Entities.DatabaseEntities
 {
-    public class Company
+    public class Company : BaseEntity
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Introduction { get; set; }
         public ICollection<Employee> Employees { get; set; }

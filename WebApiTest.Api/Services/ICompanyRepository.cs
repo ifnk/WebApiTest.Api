@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Api.Entities;
+using WebApiTest.Api.Entities.DatabaseEntities;
 
 namespace WebApiTest.Api.Services
 {
-    public interface ICompanyRepository
-
+    public interface ICompanyRepository : IBaseRepository<Company>
     {
         //公司相关 的接口方法 
         Task<PaginatedList<Company>> GetCompaniesAsync([FromQuery] QueryParameter queryParameter);
@@ -21,14 +21,11 @@ namespace WebApiTest.Api.Services
 
 
         //员工相关 的接口方法 
+        Task<PaginatedList<Employee>> GetEmployeesWithAllCompany([FromQuery] QueryParameter queryParameter);
         Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId);
         Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId);
         void AddEmployee(Guid companyId, Employee employee);
         void UpdateEmployee(Employee employee);
         void DeleteEmployee(Employee employee);
-
-
-        //操作完成后 要保存下……
-        Task<bool> SaveAsync();
     }
 }

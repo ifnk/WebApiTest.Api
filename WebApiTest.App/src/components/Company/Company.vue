@@ -14,9 +14,6 @@
       <el-col :span="4">
         <el-button @click="addCompanyClick" type="primary">添加公司</el-button>
       </el-col>
-      <el-col :span="4">
-        <el-button @click="test" type="primary">测试</el-button>
-      </el-col>
     </el-row>
 
     <!--添加公司-->
@@ -56,7 +53,7 @@
         </el-table-column>
       </el-table>
     </el-dialog>
-    <el-card class="box-card mt15">
+    <el-card class="box-card mt20">
       <el-table :data="companyList" stripe border style="width: 100%">
         <el-table-column
           prop="date"

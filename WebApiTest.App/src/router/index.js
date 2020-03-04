@@ -6,6 +6,8 @@ import Welcome from '../components/Welcome'
 import User from '../components/User/User'
 import Store from '../components/Store/Store'
 import Company from '../components/Company/Company'
+import Employee from '../components/Company/Employee'
+import Question from '../components/Question/Question'
 
 Vue.use(VueRouter)
 
@@ -21,7 +23,9 @@ const routes = [
       { path: '/welcome', component: Welcome },
       { path: '/user', component: User },
       { path: '/store', component: Store },
-      { path: '/company', component: Company }
+      { path: '/company', component: Company },
+      { path: '/employee', component: Employee },
+      { path: '/question', component: Question }
     ]
   }
 
